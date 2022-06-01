@@ -1,0 +1,377 @@
+---
+title: "02 - Exploration"
+output: html_notebook
+---
+
+### Imports
+
+```{r}
+library(dplyr)
+library(ggplot2)
+```
+
+```{r}
+df <- readRDS("../data/clean-data.rds")
+head(df)
+```
+
+### Exploratory Data Analysis
+
+Reorder levels in `Adaptivity.Level` for better visualization.
+
+```{r}
+df$Adaptivity.Level <- df$Adaptivity.Level %>%
+  factor(levels = c("Low", "Moderate", "High"))
+```
+
+Set theme.
+
+```{r}
+theme_set(theme_bw())
+```
+
+#### Univariate
+
+##### Gender
+
+```{r}
+df %>%
+  ggplot(aes(Gender)) +
+  geom_bar(aes(fill = Gender)) +
+  ggtitle("Count by Gender") +
+  ylab("Count") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### Age
+
+```{r}
+df %>%
+  ggplot(aes(Age)) +
+  geom_bar(aes(fill = Age)) +
+  ggtitle("Count by Age") +
+  ylab("Count") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### Education Level
+
+```{r}
+df %>%
+  ggplot(aes(Education.Level)) +
+  geom_bar(aes(fill = Education.Level)) +
+  ggtitle("Count by Education Level") +
+  xlab("Education Level") +
+  ylab("Count") +
+  labs(fill = "Education Level") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### Institution Type
+
+```{r}
+df %>%
+  ggplot(aes(Institution.Type)) +
+  geom_bar(aes(fill = Institution.Type)) +
+  ggtitle("Count by Institution Type") +
+  xlab("Institution Type") +
+  ylab("Count") +
+  labs(fill = "Institution Type") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### IT Student
+
+```{r}
+df %>%
+  ggplot(aes(IT.Student)) +
+  geom_bar(aes(fill = IT.Student)) +
+  ggtitle("Count by IT Student") +
+  xlab("IT Student") +
+  ylab("Count") +
+  labs(fill = "IT Student") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### Location
+
+```{r}
+df %>%
+  ggplot(aes(Location)) +
+  geom_bar(aes(fill = Location)) +
+  ggtitle("Count by Location") +
+  xlab("In Town") +
+  ylab("Count") +
+  labs(fill = "In Town") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### Load Shedding
+
+```{r}
+df %>%
+  ggplot(aes(Load.shedding)) +
+  geom_bar(aes(fill = Load.shedding)) +
+  ggtitle("Count by Load Shedding") +
+  xlab("Load Shedding") +
+  ylab("Count") +
+  labs(fill = "Load Shedding") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### Financial Condition
+
+```{r}
+df %>%
+  ggplot(aes(Financial.Condition)) +
+  geom_bar(aes(fill = Financial.Condition)) +
+  ggtitle("Count by Financial Condition") +
+  xlab("Financial Condition") +
+  ylab("Count") +
+  labs(fill = "Financial Condition") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### Internet Type
+
+```{r}
+df %>%
+  ggplot(aes(Internet.Type)) +
+  geom_bar(aes(fill = Internet.Type)) +
+  ggtitle("Count by Internet Type") +
+  xlab("Internet Type") +
+  ylab("Count") +
+  labs(fill = "Internet Type") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### Network Type
+
+```{r}
+df %>%
+  ggplot(aes(Network.Type)) +
+  geom_bar(aes(fill = Network.Type)) +
+  ggtitle("Count by Network Type") +
+  xlab("Network Type") +
+  ylab("Count") +
+  labs(fill = "Network Type") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### Class Duration
+
+```{r}
+df %>%
+  ggplot(aes(Class.Duration)) +
+  geom_bar(aes(fill = Class.Duration)) +
+  ggtitle("Count by Class Duration") +
+  xlab("Class Duration") +
+  ylab("Count") +
+  labs(fill = "Class Duration") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### LMS
+
+```{r}
+df %>%
+  ggplot(aes(Self.Lms)) +
+  geom_bar(aes(fill = Self.Lms)) +
+  ggtitle("Count by LMS Availability") +
+  xlab("LMS Availability") +
+  ylab("Count") +
+  labs(fill = "LMS Availability") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### Device
+
+```{r}
+df %>%
+  ggplot(aes(Device)) +
+  geom_bar(aes(fill = Device)) +
+  ggtitle("Count by Device") +
+  ylab("Count") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### Adaptivity Level
+
+```{r}
+df %>%
+  ggplot(aes(Adaptivity.Level)) +
+  geom_bar(aes(fill = Adaptivity.Level)) +
+  ggtitle("Count by Adaptivity Level") +
+  xlab("Adaptivity Level") +
+  ylab("Count") +
+  labs(fill = "Adaptivity Level") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+#### Bivariate
+
+##### Gender
+
+```{r}
+df %>%
+  ggplot(aes(Gender)) +
+  geom_bar(aes(fill = Adaptivity.Level), position = "dodge") +
+  ggtitle("Adaptivity Level by Gender") +
+  ylab("Count") +
+  labs(fill = "Adaptivity Level") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### Age
+
+```{r}
+df %>%
+  ggplot(aes(Age)) +
+  geom_bar(aes(fill = Adaptivity.Level), position = "dodge") +
+  ggtitle("Adaptivity Level by Age") +
+  ylab("Count") +
+  labs(fill = "Adaptivity Level") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### Education Level
+
+```{r}
+df %>%
+  ggplot(aes(Education.Level)) +
+  geom_bar(aes(fill = Adaptivity.Level), position = "dodge") +
+  ggtitle("Adaptivity Level by Education Level") +
+  xlab("Education Level") +
+  ylab("Count") +
+  labs(fill = "Adaptivity Level") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### Institution Type
+
+```{r}
+df %>%
+  ggplot(aes(Institution.Type)) +
+  geom_bar(aes(fill = Adaptivity.Level), position = "dodge") +
+  ggtitle("Adaptivity Level by Institution Type") +
+  xlab("Institution Type") +
+  ylab("Count") +
+  labs(fill = "Adaptivity Level") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### IT Student
+
+```{r}
+df %>%
+  ggplot(aes(IT.Student)) +
+  geom_bar(aes(fill = Adaptivity.Level), position = "dodge") +
+  ggtitle("Adaptivity Level by IT Student") +
+  xlab("IT Student") +
+  ylab("Count") +
+  labs(fill = "Adaptivity Level") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### Location
+
+```{r}
+df %>%
+  ggplot(aes(Location)) +
+  geom_bar(aes(fill = Adaptivity.Level), position = "dodge") +
+  ggtitle("Adaptivity Level by Location") +
+  xlab("In Town") +
+  ylab("Count") +
+  labs(fill = "Adaptivity Level") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### Load Shedding
+
+```{r}
+df %>%
+  ggplot(aes(Load.shedding)) +
+  geom_bar(aes(fill = Adaptivity.Level), position = "dodge") +
+  ggtitle("Adaptivity Level by Load Shedding") +
+  xlab("Load Shedding") +
+  ylab("Count") +
+  labs(fill = "Adaptivity Level") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### Financial Condition
+
+```{r}
+df %>%
+  ggplot(aes(Financial.Condition)) +
+  geom_bar(aes(fill = Adaptivity.Level), position = "dodge") +
+  ggtitle("Adaptivity Level by Financial Condition") +
+  xlab("Financial Condition") +
+  ylab("Count") +
+  labs(fill = "Adaptivity Level") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### Internet Type
+
+```{r}
+df %>%
+  ggplot(aes(Internet.Type)) +
+  geom_bar(aes(fill = Adaptivity.Level), position = "dodge") +
+  ggtitle("Adaptivity Level by Internet Type") +
+  xlab("Internet Type") +
+  ylab("Count") +
+  labs(fill = "Adaptivity Level") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### Network Type
+
+```{r}
+df %>%
+  ggplot(aes(Network.Type)) +
+  geom_bar(aes(fill = Adaptivity.Level), position = "dodge") +
+  ggtitle("Adaptivity Level by Network Type") +
+  xlab("Network Type") +
+  ylab("Count") +
+  labs(fill = "Adaptivity Level") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### Class Duration
+
+```{r}
+df %>%
+  ggplot(aes(Class.Duration)) +
+  geom_bar(aes(fill = Adaptivity.Level), position = "dodge") +
+  ggtitle("Adaptivity Level by Class Duration") +
+  xlab("Class Duration") +
+  ylab("Count") +
+  labs(fill = "Adaptivity Level") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### LMS
+
+```{r}
+df %>%
+  ggplot(aes(Self.Lms)) +
+  geom_bar(aes(fill = Adaptivity.Level), position = "dodge") +
+  ggtitle("Adaptivity Level by LMS Availability") +
+  xlab("LMS Availability") +
+  ylab("Count") +
+  labs(fill = "Adaptivity Level") +
+  scale_fill_brewer(palette = "Pastel2")
+```
+
+##### Device
+
+```{r}
+df %>%
+  ggplot(aes(Device)) +
+  geom_bar(aes(fill = Adaptivity.Level), position = "dodge") +
+  ggtitle("Adaptivity Level by Device") +
+  ylab("Count") +
+  labs(fill = "Adaptivity Level") +
+  scale_fill_brewer(palette = "Pastel2")
+```

@@ -1,0 +1,110 @@
+---
+title: "01 - Cleaning"
+output: html_notebook
+---
+
+### Reference
+
+[Students' Adaptability Level Prediction in Online Education using Machine Learning Approaches](https://ieeexplore.ieee.org/document/9579741)
+
+### Dataset
+
+[Students Adaptability Level in Online Education](https://www.kaggle.com/datasets/mdmahmudulhasansuzan/students-adaptability-level-in-online-education)
+
+#### Metadata
+
+| Variable | Description |
+| --- | --- |
+| Gender | Gender type of student |
+| Age | Age range of the student |
+| Education Level | Education institution level |
+| Institution Type | Education institution type |
+| IT Student | Studying as IT student or not |
+| Location | Is student location in town |
+| Load-shedding | Level of load shedding |
+| Financial Condition | Financial condition of family |
+| Internet Type | Internet type used mostly in device |
+| Network Type | Network connectivity type |
+| Class Duration | Daily class duration |
+| Self Lms | Institution’s own LMS availability |
+| Device | Device used mostly in class |
+| Adaptivity Level | Adaptability level of the student |
+
+### Imports
+
+```{r}
+library(dplyr)
+```
+
+### Cleaning
+
+Load dataset.
+
+```{r}
+df <- read.csv(
+  "../data/students_adaptability_level_online_education.csv",
+  stringsAsFactors = TRUE
+)
+
+head(df)
+```
+
+```{r}
+str(df)
+```
+
+```{r}
+summary(df)
+```
+
+No missing values.
+
+Convert variables to ordered factors.
+
+Notes:
+
+- We will treat `Education.Level` as nominal variable to indicate the origin of the student.
+- We will treat `Load.shedding` as nominal variable to indicate if the student is from high or low load shedding areas. 
+- We will not convert `Adaptivity.Level` since it will be used as the dependent variable for the multiclass classification problem.
+
+```{r}
+df$Age <- df$Age %>%
+  factor(
+    levels = c("1-5", "6-10", "11-15", "16-20", "21-25", "26-30"),
+    ordered = TRUE
+  )
+
+df$Financial.Condition <- df$Financial.Condition %>%
+  factor(
+    levels = c("Poor", "Mid", "Rich"),
+    ordered = TRUE
+  )
+
+df$Network.Type <- df$Network.Type %>%
+  factor(
+    levels = c("2G", "3G", "4G"),
+    ordered = TRUE
+  )
+
+df$Class.Duration <- df$Class.Duration %>%
+  factor(
+    levels = c("0", "1-3", "3-6"),
+    ordered = TRUE
+  )
+```
+
+### Descriptive Analysis
+
+```{r}
+str(df)
+```
+
+```{r}
+summary(df)
+```
+
+### Exports
+
+```{r}
+saveRDS(df, "../data/clean-data.rds")
+```
