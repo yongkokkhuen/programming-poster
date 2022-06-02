@@ -1,0 +1,121 @@
+---
+title: "03 - Transformation"
+output: html_notebook
+---
+
+### Imports
+
+```{r}
+library(dplyr)
+library(caret)
+```
+
+```{r}
+df <- readRDS("../data/clean-data.rds")
+head(df)
+```
+
+### Train-Test Split
+
+```{r}
+set.seed(42)
+
+train_index <- createDataPartition(
+  df$Adaptivity.Level,
+  p = 0.8,
+  list = FALSE,
+  times = 1
+)
+
+train_set <- df[train_index, ]
+test_set <- df[-train_index, ]
+```
+
+### Feature Selection
+
+```{r}
+x <- train_set %>% select(-Adaptivity.Level)
+y <- train_set[, "Adaptivity.Level"]
+```
+
+#### Recursive Feature Elimination
+
+```{r}
+rfe_control <- rfeControl(
+  functions = rfFuncs,
+  method = "repeatedcv",
+  number = 10,
+  repeats = 10,
+  verbose = FALSE
+)
+```
+
+```{r}
+set.seed(42)
+
+rf_rfe <- rfe(x, y, sizes = 1:ncol(x) - 1, rfeControl = rfe_control)
+rf_rfe
+```
+
+```{r}
+plot(rf_rfe, type = c("g", "o"))
+```
+
+```{r}
+predictors(rf_rfe)
+```
+
+```{r}
+varImp(rf_rfe)
+```
+
+All variables are selected by RFE.
+
+#### Genetic Algorithm
+
+```{r}
+ga_control <- gafsControl(
+  functions = rfGA,
+  method = "repeatedcv",
+  number = 10,
+  repeats = 10
+)
+```
+
+```{r}
+set.seed(42)
+
+rf_ga <- gafs(x, y, gafsControl = ga_control)
+rf_ga
+```
+
+```{r}
+plot(rf_ga)
+```
+
+```{r}
+ga_selected_variables <- rf_ga$optVariables
+ga_selected_variables
+```
+
+Create train set and test set with selected variables from GA.
+
+```{r}
+train_set_ga <- train_set %>% 
+  select(all_of(ga_selected_variables), Adaptivity.Level)
+
+test_set_ga <- test_set %>% 
+  select(all_of(ga_selected_variables), Adaptivity.Level)
+```
+
+### Exports
+
+```{r}
+saveRDS(train_set, "../data/train_set.rds")
+
+saveRDS(test_set, "../data/test_set.rds")
+
+saveRDS(train_set_ga, "../data/train_set_ga.rds")
+
+saveRDS(test_set, "../data/test_set_ga.rds")
+```

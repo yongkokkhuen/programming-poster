@@ -375,3 +375,22 @@ df %>%
   labs(fill = "Adaptivity Level") +
   scale_fill_brewer(palette = "Pastel2")
 ```
+
+### Correlation Analysis
+
+#### Chi-Squared Tests
+
+```{r warning=FALSE}
+df_p_values <- data.frame(
+  p.value = df %>%
+    select(-Adaptivity.Level) %>%
+    apply(
+      MARGIN = 2,
+      FUN = function(x) chisq.test(x, df$Adaptivity.Level)$p.value
+    ) %>%
+    sort() %>%
+    unlist()
+)
+
+df_p_values
+```
