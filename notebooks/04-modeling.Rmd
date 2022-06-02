@@ -1,0 +1,208 @@
+---
+title: "04 - Modeling"
+output: html_notebook
+---
+
+### Imports
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(caret)
+```
+
+```{r}
+train_set <- readRDS("../data/train_set.rds")
+head(train_set)
+```
+
+```{r}
+test_set <- readRDS("../data/test_set.rds")
+head(test_set)
+```
+
+```{r}
+train_set_ga <- readRDS("../data/train_set_ga.rds")
+head(train_set_ga)
+```
+
+```{r}
+test_set_ga <- readRDS("../data/test_set_ga.rds")
+head(test_set_ga)
+```
+
+### Modeling
+
+Define repeated 10-fold cross validation.
+
+```{r}
+fit_control <- trainControl(
+  method = "repeatedcv",
+  number = 10,
+  repeats = 10
+)
+```
+
+Define a helper function to train model.
+
+```{r}
+train_model <- function(method = "",
+                        data = train_set,
+                        tuneGrid = NULL,
+                        tuneLength = 3) {
+  set.seed(42)
+
+  fit <- train(
+    Adaptivity.Level ~ .,
+    data = data,
+    method = method,
+    trControl = fit_control,
+    tuneGrid = tuneGrid,
+    tuneLength = tuneLength
+  )
+
+  print(fit)
+  
+  return(fit)
+}
+```
+
+Define a helper function to evaluate model.
+
+```{r}
+evaluate_model <- function(
+    model = NULL, 
+    alias = "",
+    data = test_set,
+    family = "") {
+  
+  pred <- predict(model, data)
+
+  cm <- confusionMatrix(pred, data$Adaptivity.Level, mode = "prec_recall")
+  print(cm)
+  
+  return(data.frame(
+    Model = alias,
+    Family = ifelse(family == "", alias, family),
+    Accuracy = round(cm$overall[["Accuracy"]], 3),
+    Precision.Low = round(cm$byClass["Class: Low", "Precision"], 3),
+    Recall.Low = round(cm$byClass["Class: Low", "Recall"], 3),
+    F1.Low = round(cm$byClass["Class: Low", "F1"], 3),
+    Precision.Moderate = round(cm$byClass["Class: Moderate", "Precision"], 3),
+    Recall.Moderate = round(cm$byClass["Class: Moderate", "Recall"], 3),
+    F1.Moderate = round(cm$byClass["Class: Moderate", "F1"], 3),
+    Precision.High = round(cm$byClass["Class: High", "Precision"], 3),
+    Recall.High = round(cm$byClass["Class: High", "Recall"], 3),
+    F1.High = round(cm$byClass["Class: High", "F1"], 3)
+  ))
+}
+```
+
+#### Decision Tree
+
+##### Train Set
+
+```{r}
+dt_clf <- train_model("rpart2")
+```
+
+```{r}
+plot(dt_clf)
+```
+
+Perform hyperparameter tuning using `tuneLength`.
+
+```{r}
+dt_clf <- train_model("rpart2", tuneLength = 10)
+```
+
+```{r}
+plot(dt_clf)
+```
+
+Tuning done.
+
+```{r}
+dt_metrics <- evaluate_model(dt_clf, "DT")
+```
+
+##### Train Set (GA)
+
+```{r}
+dt_clf_ga <- train_model("rpart2", train_set_ga)
+```
+
+```{r}
+plot(dt_clf_ga)
+```
+
+Perform hyperparameter tuning using `tuneLength`.
+
+```{r}
+dt_clf_ga <- train_model("rpart2", train_set_ga, tuneLength = 10)
+```
+
+```{r}
+plot(dt_clf_ga)
+```
+
+Tuning done.
+
+```{r}
+dt_metrics_ga <- evaluate_model(dt_clf_ga, "DT", test_set_ga)
+```
+
+#### Random Forest
+
+##### Train Set
+
+```{r}
+rf_clf <- train_model("ranger")
+```
+
+```{r}
+plot(rf_clf)
+```
+
+Perform hyperparameter tuning using `tuneLength`.
+
+```{r}
+rf_clf <- train_model("ranger", tuneLength = 10)
+```
+
+```{r}
+plot(rf_clf)
+```
+
+Tuning done.
+
+```{r}
+rf_metrics <- evaluate_model(rf_clf, "RF")
+```
+
+##### Train Set (GA)
+
+```{r}
+rf_clf_ga <- train_model("ranger", train_set_ga)
+```
+
+```{r}
+plot(rf_clf_ga)
+```
+
+Perform hyperparameter tuning using `tuneLength`.
+
+```{r}
+rf_clf_ga <- train_model("ranger", train_set_ga, tuneLength = 10)
+```
+
+```{r}
+plot(rf_clf_ga)
+```
+
+Tuning done.
+
+```{r}
+rf_metrics_ga <- evaluate_model(rf_clf_ga, "RF", test_set_ga)
+```
+
