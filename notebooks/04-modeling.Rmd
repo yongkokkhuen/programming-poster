@@ -205,3 +205,187 @@ Tuning done.
 ```{r}
 rf_metrics_rfe <- evaluate_model(rf_clf_rfe, "RF", test_set_rfe)
 ```
+#### XGBoost (Tree)
+
+Define a helper function to train XGBoost model with less verbose output.
+
+```{r}
+train_xgb <- function(method = "",
+                        data = train_set,
+                        tuneGrid = NULL,
+                        tuneLength = 3) {
+  set.seed(42)
+
+  fit <- train(
+    Adaptivity.Level ~ .,
+    data = data,
+    method = method,
+    trControl = fit_control,
+    tuneGrid = tuneGrid,
+    tuneLength = tuneLength,
+    verbosity = 0
+  )
+
+  print(fit)
+  
+  return(fit)
+}
+```
+
+##### Train Set
+
+```{r}
+xgb_tree_clf <- train_xgb("xgbTree")
+```
+
+```{r}
+plot(xgb_tree_clf)
+```
+
+Perform hyperparameter tuning using `tuneGrid`.
+
+```{r}
+xgb_tree_tuneGrid <- expand.grid(
+  gamma = 0,
+  min_child_weight = 1,
+  max_depth = 3,
+  eta = 0.4,
+  subsample = seq(0.5, 1, 0.25),
+  colsample_bytree = 0.8,
+  nrounds = seq(100, 500, 10)
+)
+
+xgb_tree_clf <- train_xgb("xgbTree", tuneGrid = xgb_tree_tuneGrid)
+```
+
+```{r}
+plot(xgb_tree_clf)
+```
+
+Tuning done.
+
+```{r}
+xgb_tree_metrics <- evaluate_model(xgb_tree_clf, "XGB - Tree", family = "XGB")
+```
+
+##### Train Set (RFE)
+
+```{r}
+xgb_tree_clf_rfe <- train_xgb("xgbTree", train_set_rfe)
+```
+
+```{r}
+plot(xgb_tree_clf_rfe)
+```
+
+Perform hyperparameter tuning using `tuneGrid`.
+
+```{r}
+xgb_tree_tuneGrid_rfe <- expand.grid(
+  gamma = 0,
+  min_child_weight = 1,
+  max_depth = 3,
+  eta = 0.4,
+  subsample = seq(0.5, 1, 0.25),
+  colsample_bytree = 0.8,
+  nrounds = seq(100, 500, 10)
+)
+
+xgb_tree_clf_rfe <- train_xgb(
+  "xgbTree",  
+  train_set_rfe,
+  tuneGrid = xgb_tree_tuneGrid_rfe
+)
+```
+
+```{r}
+plot(xgb_tree_clf_rfe)
+```
+
+Tuning done.
+
+```{r}
+xgb_tree_metrics_rfe <- evaluate_model(
+  xgb_tree_clf_rfe, 
+  "XGB - Tree", 
+  test_set_rfe,
+  "XGB"
+)
+```
+
+#### XGBoost (Linear)
+
+##### Train Set
+
+```{r}
+xgb_lin_clf <- train_xgb("xgbLinear")
+```
+
+```{r}
+plot(xgb_lin_clf)
+```
+
+Perform hyperparameter tuning using `tuneGrid`.
+
+```{r}
+xgb_lin_tuneGrid <- expand.grid(
+  eta = 0.3,
+  lambda = c(1e-04, 1e-01, 0),
+  alpha = 1e-04,
+  nrounds = seq(100, 200, 10)
+)
+
+xgb_lin_clf <- train_xgb("xgbLinear", tuneGrid = xgb_lin_tuneGrid)
+```
+
+```{r}
+plot(xgb_lin_clf)
+```
+
+Tuning done.
+
+```{r}
+xgb_lin_metrics <- evaluate_model(xgb_lin_clf, "XGB - Linear", family = "XGB")
+```
+
+##### Train Set (RFE)
+
+```{r}
+xgb_lin_clf_rfe <- train_xgb("xgbLinear", train_set_rfe)
+```
+
+```{r}
+plot(xgb_lin_clf_rfe)
+```
+
+Perform hyperparameter tuning using `tuneGrid`.
+
+```{r}
+xgb_lin_tuneGrid_rfe <- expand.grid(
+  eta = 0.3,
+  lambda = c(1e-04, 0),
+  alpha = 1e-01,
+  nrounds = seq(100, 200, 10)
+)
+
+xgb_lin_clf_rfe <- train_xgb(
+  "xgbLinear", 
+  train_set_rfe, 
+  tuneGrid = xgb_lin_tuneGrid_rfe
+)
+```
+
+```{r}
+plot(xgb_lin_clf_rfe)
+```
+
+Tuning done.
+
+```{r}
+xgb_lin_metrics_rfe <- evaluate_model(
+  xgb_lin_clf_rfe, 
+  "XGB - Linear", 
+  test_set_rfe,
+  "XGB"
+)
+```
