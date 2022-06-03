@@ -22,13 +22,13 @@ head(test_set)
 ```
 
 ```{r}
-train_set_ga <- readRDS("../data/train_set_ga.rds")
-head(train_set_ga)
+train_set_rfe <- readRDS("../data/train_set_rfe.rds")
+head(train_set_rfe)
 ```
 
 ```{r}
-test_set_ga <- readRDS("../data/test_set_ga.rds")
-head(test_set_ga)
+test_set_rfe <- readRDS("../data/test_set_rfe.rds")
+head(test_set_rfe)
 ```
 
 ### Modeling
@@ -126,30 +126,30 @@ Tuning done.
 dt_metrics <- evaluate_model(dt_clf, "DT")
 ```
 
-##### Train Set (GA)
+##### Train Set (RFE)
 
 ```{r}
-dt_clf_ga <- train_model("rpart2", train_set_ga)
+dt_clf_rfe <- train_model("rpart2", train_set_rfe)
 ```
 
 ```{r}
-plot(dt_clf_ga)
+plot(dt_clf_rfe)
 ```
 
 Perform hyperparameter tuning using `tuneLength`.
 
 ```{r}
-dt_clf_ga <- train_model("rpart2", train_set_ga, tuneLength = 10)
+dt_clf_rfe <- train_model("rpart2", train_set_rfe, tuneLength = 10)
 ```
 
 ```{r}
-plot(dt_clf_ga)
+plot(dt_clf_rfe)
 ```
 
 Tuning done.
 
 ```{r}
-dt_metrics_ga <- evaluate_model(dt_clf_ga, "DT", test_set_ga)
+dt_metrics_rfe <- evaluate_model(dt_clf_rfe, "DT", test_set_rfe)
 ```
 
 #### Random Forest
@@ -180,29 +180,28 @@ Tuning done.
 rf_metrics <- evaluate_model(rf_clf, "RF")
 ```
 
-##### Train Set (GA)
+##### Train Set (RFE)
 
 ```{r}
-rf_clf_ga <- train_model("ranger", train_set_ga)
+rf_clf_rfe <- train_model("ranger", train_set_rfe)
 ```
 
 ```{r}
-plot(rf_clf_ga)
+plot(rf_clf_rfe)
 ```
 
 Perform hyperparameter tuning using `tuneLength`.
 
 ```{r}
-rf_clf_ga <- train_model("ranger", train_set_ga, tuneLength = 10)
+rf_clf_rfe <- train_model("ranger", train_set_rfe, tuneLength = 10)
 ```
 
 ```{r}
-plot(rf_clf_ga)
+plot(rf_clf_rfe)
 ```
 
 Tuning done.
 
 ```{r}
-rf_metrics_ga <- evaluate_model(rf_clf_ga, "RF", test_set_ga)
+rf_metrics_rfe <- evaluate_model(rf_clf_rfe, "RF", test_set_rfe)
 ```
-

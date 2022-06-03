@@ -93,6 +93,13 @@ df$Class.Duration <- df$Class.Duration %>%
   )
 ```
 
+Reorder levels in Adaptivity.Level for better readability.
+
+```{r}
+df$Adaptivity.Level <- df$Adaptivity.Level %>%
+  factor(levels = c("Low", "Moderate", "High"))
+```
+
 ### Descriptive Analysis
 
 ```{r}

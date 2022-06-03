@@ -62,14 +62,23 @@ plot(rf_rfe, type = c("g", "o"))
 ```
 
 ```{r}
-predictors(rf_rfe)
+selected_variables_rfe <- predictors(rf_rfe)
+selected_variables_rfe
 ```
 
 ```{r}
 varImp(rf_rfe)
 ```
 
-All variables are selected by RFE.
+Create train set and test set with selected variables from RFE.
+
+```{r}
+train_set_rfe <- train_set %>% 
+  select(all_of(selected_variables_rfe), Adaptivity.Level)
+
+test_set_rfe <- test_set %>% 
+  select(all_of(selected_variables_rfe), Adaptivity.Level)
+```
 
 #### Genetic Algorithm
 
@@ -94,18 +103,8 @@ plot(rf_ga)
 ```
 
 ```{r}
-ga_selected_variables <- rf_ga$optVariables
-ga_selected_variables
-```
-
-Create train set and test set with selected variables from GA.
-
-```{r}
-train_set_ga <- train_set %>% 
-  select(all_of(ga_selected_variables), Adaptivity.Level)
-
-test_set_ga <- test_set %>% 
-  select(all_of(ga_selected_variables), Adaptivity.Level)
+selected_variables_ga <- rf_ga$optVariables
+selected_variables_ga
 ```
 
 ### Exports
@@ -115,7 +114,7 @@ saveRDS(train_set, "../data/train_set.rds")
 
 saveRDS(test_set, "../data/test_set.rds")
 
-saveRDS(train_set_ga, "../data/train_set_ga.rds")
+saveRDS(train_set_rfe, "../data/train_set_rfe.rds")
 
-saveRDS(test_set, "../data/test_set_ga.rds")
+saveRDS(test_set_rfe, "../data/test_set_rfe.rds")
 ```
