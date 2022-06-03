@@ -98,6 +98,188 @@ evaluate_model <- function(
 }
 ```
 
+#### Logistic Regression
+
+##### Train Set
+
+```{r}
+lr_clf <- train_model("glmnet")
+```
+
+```{r}
+plot(lr_clf)
+```
+
+Perform hyperparameter tuning using `tuneLength`.
+
+```{r}
+lr_clf <- train_model("glmnet", tuneLength = 10)
+```
+
+```{r}
+plot(lr_clf)
+```
+
+Tuning done.
+
+```{r}
+lr_metrics <- evaluate_model(lr_clf, "LR")
+```
+
+##### Train Set (RFE)
+
+```{r}
+lr_clf_rfe <- train_model("glmnet", train_set_rfe)
+```
+
+```{r}
+plot(lr_clf_rfe)
+```
+
+Perform hyperparameter tuning using `tuneLength`.
+
+```{r}
+lr_clf_rfe <- train_model("glmnet", train_set_rfe, tuneLength = 10)
+```
+
+```{r}
+plot(lr_clf_rfe)
+```
+
+Tuning done.
+
+```{r}
+lr_metrics_rfe <- evaluate_model(lr_clf_rfe, "LR", test_set_rfe)
+```
+
+#### K-Nearest Neighbors
+
+##### Train Set
+
+```{r}
+knn_clf <- train_model("knn")
+```
+
+```{r}
+plot(knn_clf)
+```
+
+Perform hyperparameter tuning using `tuneGrid`.
+
+```{r}
+knn_tuneGrid <- expand.grid(k = 1:5)
+
+knn_clf <- train_model("knn", tuneGrid = knn_tuneGrid)
+```
+
+```{r}
+plot(knn_clf)
+```
+
+Tuning done.
+
+```{r}
+knn_metrics <- evaluate_model(knn_clf, "KNN")
+```
+
+##### Train Set (RFE)
+
+```{r}
+knn_clf_rfe <- train_model("knn", train_set_rfe)
+```
+
+```{r}
+plot(knn_clf_rfe)
+```
+
+Perform hyperparameter tuning using `tuneGrid`.
+
+```{r}
+knn_tuneGrid_rfe <- expand.grid(k = 1:5)
+
+knn_clf_rfe <- train_model("knn", train_set_rfe, tuneGrid = knn_tuneGrid_rfe)
+```
+
+```{r}
+plot(knn_clf_rfe)
+```
+
+Tuning done.
+
+```{r}
+knn_metrics_rfe <- evaluate_model(knn_clf_rfe, "KNN", test_set_rfe)
+```
+
+#### Naive Bayes
+
+##### Train Set
+
+```{r}
+nb_clf <- train_model("naive_bayes")
+```
+
+```{r}
+plot(nb_clf)
+```
+
+Perform hyperparameter tuning using `tuneGrid`.
+
+```{r}
+nb_tuneGrid <- expand.grid(
+  adjust = 1,
+  usekernel = TRUE,
+  laplace = seq(0.1, 1, 0.1)
+)
+
+nb_clf <- train_model("naive_bayes", tuneGrid = nb_tuneGrid)
+```
+
+```{r}
+plot(nb_clf)
+```
+
+Tuning done.
+
+```{r}
+nb_metrics <- evaluate_model(nb_clf, "NB")
+```
+
+##### Train Set (RFE)
+
+```{r}
+nb_clf_rfe <- train_model("naive_bayes", train_set_rfe)
+```
+
+```{r}
+plot(nb_clf_rfe)
+```
+
+Perform hyperparameter tuning using `tuneGrid`.
+
+```{r}
+nb_tuneGrid_rfe <- expand.grid(
+  adjust = 1,
+  usekernel = TRUE,
+  laplace = seq(0.1, 1, 0.1)
+)
+
+nb_clf_rfe <- train_model(
+  "naive_bayes", 
+  train_set_rfe, 
+  tuneGrid = nb_tuneGrid_rfe
+)
+```
+
+```{r}
+plot(nb_clf_rfe)
+```
+
+Tuning done.
+
+```{r}
+nb_metrics_rfe <- evaluate_model(nb_clf_rfe, "NB", test_set_rfe)
+```
+
 #### Decision Tree
 
 ##### Train Set
