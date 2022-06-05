@@ -194,16 +194,16 @@ df %>%
   custom_palette
 ```
 
-##### Adaptivity Level
+##### Adaptability Level
 
 ```{r}
 df %>%
   ggplot(aes(Adaptivity.Level)) +
   geom_bar(aes(fill = Adaptivity.Level)) +
-  ggtitle("Count by Adaptivity Level") +
-  xlab("Adaptivity Level") +
+  ggtitle("Count by Adaptability Level") +
+  xlab("Adaptability Level") +
   ylab("Count") +
-  labs(fill = "Adaptivity Level") +
+  labs(fill = "Adaptability Level") +
   custom_palette
 ```
 
@@ -215,8 +215,8 @@ df %>%
 df %>%
   ggplot(aes(Adaptivity.Level)) +
   geom_bar(aes(fill = Gender), position = "dodge") +
-  ggtitle("Adaptivity Level by Gender") +
-  xlab("Adaptivity Level") +
+  ggtitle("Adaptability Level by Gender") +
+  xlab("Adaptability Level") +
   ylab("Count") +
   custom_palette
 ```
@@ -227,8 +227,8 @@ df %>%
 df %>%
   ggplot(aes(Adaptivity.Level)) +
   geom_bar(aes(fill = Age), position = "dodge") +
-  ggtitle("Adaptivity Level by Age") +
-  xlab("Adaptivity Level") +
+  ggtitle("Adaptability Level by Age") +
+  xlab("Adaptability Level") +
   ylab("Count") +
   custom_palette
 ```
@@ -239,8 +239,8 @@ df %>%
 df %>%
   ggplot(aes(Adaptivity.Level)) +
   geom_bar(aes(fill = Education.Level), position = "dodge") +
-  ggtitle("Adaptivity Level by Education Level") +
-  xlab("Adaptivity Level") +
+  ggtitle("Adaptability Level by Education Level") +
+  xlab("Adaptability Level") +
   ylab("Count") +
   labs(fill = "Education Level") +
   custom_palette
@@ -252,8 +252,8 @@ df %>%
 df %>%
   ggplot(aes(Adaptivity.Level)) +
   geom_bar(aes(fill = Institution.Type), position = "dodge") +
-  ggtitle("Adaptivity Level by Institution Type") +
-  xlab("Adaptivity Level") +
+  ggtitle("Adaptability Level by Institution Type") +
+  xlab("Adaptability Level") +
   ylab("Count") +
   labs(fill = "Institution Level") +
   custom_palette
@@ -265,8 +265,8 @@ df %>%
 df %>%
   ggplot(aes(Adaptivity.Level)) +
   geom_bar(aes(fill = IT.Student), position = "dodge") +
-  ggtitle("Adaptivity Level by IT Student") +
-  xlab("Adaptivity Level") +
+  ggtitle("Adaptability Level by IT Student") +
+  xlab("Adaptability Level") +
   ylab("Count") +
   labs(fill = "IT Student") +
   custom_palette
@@ -278,8 +278,8 @@ df %>%
 df %>%
   ggplot(aes(Adaptivity.Level)) +
   geom_bar(aes(fill = Location), position = "dodge") +
-  ggtitle("Adaptivity Level by Location") +
-  xlab("Adaptivity Level") +
+  ggtitle("Adaptability Level by Location") +
+  xlab("Adaptability Level") +
   ylab("Count") +
   labs(fill = "In Town") +
   custom_palette
@@ -291,8 +291,8 @@ df %>%
 df %>%
   ggplot(aes(Adaptivity.Level)) +
   geom_bar(aes(fill = Load.shedding), position = "dodge") +
-  ggtitle("Adaptivity Level by Load Shedding") +
-  xlab("Adaptivity Level") +
+  ggtitle("Adaptability Level by Load Shedding") +
+  xlab("Adaptability Level") +
   ylab("Count") +
   labs(fill = "Load Shedding") +
   custom_palette
@@ -304,8 +304,8 @@ df %>%
 df %>%
   ggplot(aes(Adaptivity.Level)) +
   geom_bar(aes(fill = Financial.Condition), position = "dodge") +
-  ggtitle("Adaptivity Level by Financial Condition") +
-  xlab("Adaptivity Level") +
+  ggtitle("Adaptability Level by Financial Condition") +
+  xlab("Adaptability Level") +
   ylab("Count") +
   labs(fill = "Financial Condition") +
   custom_palette
@@ -317,8 +317,8 @@ df %>%
 df %>%
   ggplot(aes(Adaptivity.Level)) +
   geom_bar(aes(fill = Internet.Type), position = "dodge") +
-  ggtitle("Adaptivity Level by Internet Type") +
-  xlab("Adaptivity Level") +
+  ggtitle("Adaptability Level by Internet Type") +
+  xlab("Adaptability Level") +
   ylab("Count") +
   labs(fill = "Internet Type") +
   custom_palette
@@ -330,8 +330,8 @@ df %>%
 df %>%
   ggplot(aes(Adaptivity.Level)) +
   geom_bar(aes(fill = Network.Type), position = "dodge") +
-  ggtitle("Adaptivity Level by Network Type") +
-  xlab("Adaptivity Level") +
+  ggtitle("Adaptability Level by Network Type") +
+  xlab("Adaptability Level") +
   ylab("Count") +
   labs(fill = "Network Type") +
   custom_palette
@@ -343,8 +343,8 @@ df %>%
 df %>%
   ggplot(aes(Adaptivity.Level)) +
   geom_bar(aes(fill = Class.Duration), position = "dodge") +
-  ggtitle("Adaptivity Level by Class Duration") +
-  xlab("Adaptivity Level") +
+  ggtitle("Adaptability Level by Class Duration") +
+  xlab("Adaptability Level") +
   ylab("Count") +
   labs(fill = "Class Duration") +
   custom_palette
@@ -356,8 +356,8 @@ df %>%
 df %>%
   ggplot(aes(Adaptivity.Level)) +
   geom_bar(aes(fill = Self.Lms), position = "dodge") +
-  ggtitle("Adaptivity Level by LMS Availability") +
-  xlab("Adaptivity Level") +
+  ggtitle("Adaptability Level by LMS Availability") +
+  xlab("Adaptability Level") +
   ylab("Count") +
   labs(fill = "LMS Availability") +
   custom_palette
@@ -369,8 +369,8 @@ df %>%
 df %>%
   ggplot(aes(Adaptivity.Level)) +
   geom_bar(aes(fill = Device), position = "dodge") +
-  ggtitle("Adaptivity Level by Device") +
-  xlab("Adaptivity Level") +
+  ggtitle("Adaptability Level by Device") +
+  xlab("Adaptability Level") +
   ylab("Count") +
   custom_palette
 ```

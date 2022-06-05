@@ -835,7 +835,7 @@ aggregate_recall_low <- function(df) {
     ggplot(aes(x = reorder(Family, -Recall.Low), y = Recall.Low, fill = Family)) +
     geom_bar(stat = "identity") +
     geom_text(aes(label = Recall.Low), vjust=-0.5) +
-    ggtitle("Recall (Low Adaptivity) by Model") +
+    ggtitle("Recall (Low Adaptability) by Model") +
     xlab("Model") +
     ylab("Recall") +
     ylim(0, 1) +
@@ -872,7 +872,7 @@ df_eval
 aggregate_accuracy(df_eval)
 ```
 
-##### By Recall (Low Adaptivity)
+##### By Recall (Low Adaptability)
 
 ```{r}
 aggregate_recall_low(df_eval)
@@ -903,7 +903,7 @@ df_eval_rfe
 aggregate_accuracy(df_eval_rfe)
 ```
 
-##### By Recall (Low Adaptivity)
+##### By Recall (Low Adaptability)
 
 ```{r}
 aggregate_recall_low(df_eval_rfe)
