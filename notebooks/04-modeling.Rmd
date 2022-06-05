@@ -387,6 +387,7 @@ Tuning done.
 ```{r}
 rf_metrics_rfe <- evaluate_model(rf_clf_rfe, "RF", test_set_rfe)
 ```
+
 #### XGBoost (Tree)
 
 Define a helper function to train XGBoost model with less verbose output.
@@ -571,3 +572,345 @@ xgb_lin_metrics_rfe <- evaluate_model(
   "XGB"
 )
 ```
+
+#### Support Vector Machine (Linear)
+
+##### Train Set
+
+```{r}
+svm_lin_clf <- train_model("svmLinear2")
+```
+
+```{r}
+plot(svm_lin_clf)
+```
+
+Perform hyperparameter tuning using `tuneGrid`.
+
+```{r}
+svm_lin_tuneGrid <- expand.grid(cost = seq(1, 5, 0.25))
+
+svm_lin_clf <- train_model("svmLinear2", tuneGrid = svm_lin_tuneGrid)
+```
+
+```{r}
+plot(svm_lin_clf)
+```
+
+Tuning done.
+
+```{r}
+svm_lin_metrics <- evaluate_model(svm_lin_clf, "SVM - Linear", family = "SVM")
+```
+
+##### Train Set (RFE)
+
+```{r}
+svm_lin_clf_rfe <- train_model("svmLinear2", train_set_rfe)
+```
+
+```{r}
+plot(svm_lin_clf_rfe)
+```
+
+Perform hyperparameter tuning using `tuneGrid`.
+
+```{r}
+svm_lin_tuneGrid_rfe <- expand.grid(cost = seq(0.2, 1, 0.1))
+
+svm_lin_clf_rfe <- train_model(
+  "svmLinear2", 
+  train_set_rfe, 
+  tuneGrid = svm_lin_tuneGrid_rfe
+)
+```
+
+```{r}
+plot(svm_lin_clf_rfe)
+```
+
+Tuning done.
+
+```{r}
+svm_lin_metrics_rfe <- evaluate_model(
+  svm_lin_clf_rfe, 
+  "SVM - Linear", 
+  test_set_rfe,
+  "SVM"
+)
+```
+
+#### Support Vector Machine (Polynomial)
+
+##### Train Set
+
+```{r}
+svm_poly_clf <- train_model("svmPoly")
+```
+
+```{r}
+plot(svm_poly_clf)
+```
+
+Perform hyperparameter tuning using `tuneGrid`.
+
+```{r}
+svm_poly_tuneGrid <- expand.grid(
+  degree = 3:4,
+  scale = 0.1,
+  C = seq(0.25, 1, 0.05)
+)
+
+svm_poly_clf <- train_model("svmPoly", tuneGrid = svm_poly_tuneGrid)
+```
+
+```{r}
+plot(svm_poly_clf)
+```
+
+Tuning done.
+
+```{r}
+svm_poly_metrics <- evaluate_model(
+  svm_poly_clf, 
+  "SVM - Polynomial", 
+  family = "SVM"
+)
+```
+
+##### Train Set (RFE)
+
+```{r}
+svm_poly_clf_rfe <- train_model("svmPoly", train_set_rfe)
+```
+
+```{r}
+plot(svm_poly_clf_rfe)
+```
+
+Perform hyperparameter tuning using `tuneGrid`.
+
+```{r}
+svm_poly_tuneGrid_rfe <- expand.grid(
+  degree = 3:4,
+  scale = 0.1,
+  C = seq(0.25, 1, 0.05)
+)
+
+svm_poly_clf_rfe <- train_model(
+  "svmPoly", 
+  train_set_rfe,
+  tuneGrid = svm_poly_tuneGrid_rfe
+)
+```
+
+```{r}
+plot(svm_poly_clf_rfe)
+```
+
+Tuning done.
+
+```{r}
+svm_poly_metrics_rfe <- evaluate_model(
+  svm_poly_clf_rfe, 
+  "SVM - Polynomial", 
+  test_set_rfe,
+  "SVM"
+)
+```
+
+#### Support Vector Machine (Radial Basis Function)
+
+##### Train Set
+
+```{r}
+svm_rbf_clf <- train_model("svmRadial")
+```
+
+```{r}
+plot(svm_rbf_clf)
+```
+
+Perform hyperparameter tuning using `tuneLength`.
+
+```{r}
+svm_rbf_clf <- train_model("svmRadial", tuneLength = 15)
+```
+
+```{r}
+plot(svm_rbf_clf)
+```
+
+Tuning done.
+
+```{r}
+svm_rbf_metrics <- evaluate_model(svm_rbf_clf, "SVM - RBF", family = "SVM")
+```
+
+##### Train Set (RFE)
+
+```{r}
+svm_rbf_clf_rfe <- train_model("svmRadial", train_set_rfe)
+```
+
+```{r}
+plot(svm_rbf_clf_rfe)
+```
+
+Perform hyperparameter tuning using `tuneLength`.
+
+```{r}
+svm_rbf_clf_rfe <- train_model("svmRadial", train_set_rfe, tuneLength = 15)
+```
+
+```{r}
+plot(svm_rbf_clf_rfe)
+```
+
+Tuning done.
+
+```{r}
+svm_rbf_metrics_rfe <- evaluate_model(
+  svm_rbf_clf_rfe, 
+  "SVM - RBF", 
+  test_set_rfe,
+  "SVM"
+)
+```
+
+### Evaluation
+
+Set theme.
+
+```{r}
+theme_set(theme_bw())
+```
+
+Define color palette.
+
+```{r}
+custom_palette <- scale_fill_brewer(palette = "Pastel2")
+```
+
+Define a function to aggregate accuracy from model of same family.
+
+```{r}
+aggregate_accuracy <- function(df) {
+  df_accuracy <- df %>%
+    group_by(Family) %>%
+    slice(which.max(Accuracy)) %>%
+    arrange(desc(Accuracy)) %>%
+    select(-1)
+
+  print(df_accuracy)
+  
+  plot_accuracy <- df_accuracy %>%
+    ggplot(aes(x = reorder(Family, -Accuracy), y = Accuracy, fill = Family)) +
+    geom_bar(stat = "identity") +
+    geom_text(aes(label = Accuracy), vjust=-0.5) +
+    ggtitle("Accuracy by Model") +
+    xlab("Model") +
+    ylim(0, 1) +
+    labs(fill = "Model") +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+    custom_palette
+  
+  print(plot_accuracy)
+}
+```
+
+Define a function to aggregate recall score from model of same family.
+
+```{r}
+aggregate_recall_low <- function(df) {
+  df_recall_low <- df %>%
+    group_by(Family) %>%
+    slice(which.max(Recall.Low)) %>%
+    arrange(desc(Recall.Low)) %>%
+    select(-1)
+
+  print(df_recall_low)
+  
+  plot_recall_low <- df_recall_low %>%
+    ggplot(aes(x = reorder(Family, -Recall.Low), y = Recall.Low, fill = Family)) +
+    geom_bar(stat = "identity") +
+    geom_text(aes(label = Recall.Low), vjust=-0.5) +
+    ggtitle("Recall (Low Adaptivity) by Model") +
+    xlab("Model") +
+    ylab("Recall") +
+    ylim(0, 1) +
+    labs(fill = "Model") +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+    custom_palette
+  
+  print(plot_recall_low)
+}
+```
+
+#### Train Set
+
+```{r}
+df_eval <- rbind(
+  lr_metrics,
+  knn_metrics,
+  nb_metrics,
+  dt_metrics,
+  rf_metrics,
+  xgb_tree_metrics,
+  xgb_lin_metrics,
+  svm_lin_metrics,
+  svm_poly_metrics,
+  svm_rbf_metrics
+)
+
+df_eval
+```
+
+##### By Accuracy
+
+```{r}
+aggregate_accuracy(df_eval)
+```
+
+##### By Recall (Low Adaptivity)
+
+```{r}
+aggregate_recall_low(df_eval)
+```
+
+#### Train Set (RFE)
+
+```{r}
+df_eval_rfe <- rbind(
+  lr_metrics_rfe,
+  knn_metrics_rfe,
+  nb_metrics_rfe,
+  dt_metrics_rfe,
+  rf_metrics_rfe,
+  xgb_tree_metrics_rfe,
+  xgb_lin_metrics_rfe,
+  svm_lin_metrics_rfe,
+  svm_poly_metrics_rfe,
+  svm_rbf_metrics_rfe
+)
+
+df_eval_rfe
+```
+
+##### By Accuracy
+
+```{r}
+aggregate_accuracy(df_eval_rfe)
+```
+
+##### By Recall (Low Adaptivity)
+
+```{r}
+aggregate_recall_low(df_eval_rfe)
+```
+
+### Model Selection
+
+Both K-Nearest Neighbors and Random Forest perform the best with all features selected.
+
+We will choose K-Nearest Neighbors due to its simplicity.
