@@ -255,7 +255,7 @@ df %>%
   ggtitle("Adaptability Level by Institution Type") +
   xlab("Adaptability Level") +
   ylab("Count") +
-  labs(fill = "Institution Level") +
+  labs(fill = "Institution Type") +
   custom_palette
 ```
 

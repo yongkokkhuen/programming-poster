@@ -6,3 +6,4 @@
 | ------------- | --------------------------------- |
 | data          | Datasets                          |
 | notebooks     | Notebooks for different processes |
+| visualization | Visualization for poster          |
