@@ -93,6 +93,34 @@ p_finance <- df_finance %>%
 p_finance
 ```
 
+
+
+#### Adaptability Level by Institution Type
+
+```{r}
+df_institute <- df %>%
+  group_by(Institution.Type, Adaptivity.Level) %>%
+  count() %>%
+  group_by(Institution.Type) %>%
+  mutate(percent = round(n / sum(n) * 100))
+
+df_institute
+```
+
+```{r}
+p_institute <- df_institute %>%
+  ggplot(aes(Institution.Type, percent)) +
+  geom_bar(aes(fill = Adaptivity.Level), stat = "identity") +
+  ggtitle("Adaptability Level by Institution Type") +
+  xlab("Institution Type") +
+  ylab("Percentage") +
+  labs(fill = "Adaptability Level") +
+  custom_palette +
+  custom_theme
+
+p_institute
+```
+
 ### Exports
 
 ```{r}
@@ -103,3 +131,6 @@ ggsave("../visualization/p_adapt.png", p_adapt, width = 4, height = 4)
 ggsave("../visualization/p_finance.png", p_finance, width = 4, height = 4)
 ```
 
+```{r}
+ggsave("../visualization/p_institute.png", p_institute, width = 4, height = 4)
+```
